@@ -1,0 +1,58 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "sigint"
+version = "0.1.0"
+description = "Agentic alternative data signal explorer"
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.13"
+dependencies = [
+    "langgraph>=0.2",
+    "fastapi>=0.115",
+    "uvicorn[standard]>=0.32",
+    "asyncpg>=0.30",
+    "pgvector>=0.3",
+    "pydantic>=2.0",
+    "pydantic-settings>=2.0",
+    "rapidfuzz>=3.0",
+    "httpx>=0.27",
+    "structlog>=24.0",
+    "sqlalchemy>=2.0",
+    "alembic>=1.14",
+]
+
+[project.optional-dependencies]
+semantic = [
+    "sentence-transformers>=3.0",
+]
+dev = [
+    "pytest>=8.0",
+    "pytest-asyncio>=0.24",
+    "ruff>=0.8",
+    "mypy>=1.13",
+]
+
+[tool.ruff]
+target-version = "py313"
+line-length = 99
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP"]
+
+[tool.mypy]
+python_version = "3.13"
+strict = false
+warn_return_any = true
+warn_unused_configs = true
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/sigint"]
