@@ -1,4 +1,4 @@
-.PHONY: setup lint test eval
+.PHONY: setup lint test eval db-up db-migrate
 
 setup:
 	pip install -e ".[dev]"
@@ -12,3 +12,9 @@ test:
 
 eval:
 	python -m sigint.eval.run --output results/latest.json
+
+db-up:
+	docker-compose up -d
+
+db-migrate:
+	alembic upgrade head
