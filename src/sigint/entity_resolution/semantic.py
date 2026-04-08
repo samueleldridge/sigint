@@ -47,7 +47,13 @@ def _get_model() -> Any:
 
 
 class SemanticMatchStrategy:
-    """Match query by embedding cosine similarity against pre-computed entity embeddings."""
+    """Match query by embedding cosine similarity against pre-computed entity embeddings.
+
+    This is an in-memory stopgap. The target architecture (see docs/architecture.md)
+    uses pgvector for similarity search, which avoids loading all embeddings into RAM
+    and scales to large entity corpora. This implementation should be replaced with a
+    pgvector-backed strategy once the data layer is populated.
+    """
 
     def __init__(
         self,
@@ -65,6 +71,8 @@ class SemanticMatchStrategy:
         """Embed the query and find the closest entity above the threshold."""
         query_embedding = self._embed_fn(request.query_name)
 
+        # TODO: replace in-memory loop with pgvector nearest-neighbour query
+        # once the data layer is wired up (see docs/architecture.md).
         best_score: float = 0.0
         best_entity: Entity | None = None
 
